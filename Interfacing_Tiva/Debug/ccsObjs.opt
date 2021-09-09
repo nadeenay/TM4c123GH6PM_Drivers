@@ -1,0 +1,1 @@
+"./main.obj" "./tm4c123gh6pm_startup_ccs.obj" "./repo/APP/LED.obj" "./repo/MCAL/DIO/DIO.obj" "./repo/MCAL/GP_Timers/Timer.obj" "../tm4c123gh6pm.cmd" -llibc.a 
