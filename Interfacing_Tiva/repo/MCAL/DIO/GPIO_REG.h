@@ -12,7 +12,7 @@
 
 //------------------------------->GPIO REGISTERS OFFSET <------------------------------//
 
-#define GPIODATA  0x000
+#define GPIODATA  0x3FC
 
 /* GPIO DIRECTION 0-->INPUT 1-->OUTPUT */
 #define GPIODIR   0x400
