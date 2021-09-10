@@ -3,12 +3,13 @@
 #include "DIO_Types.h"
 #include "GPIO_REG.h"
 #include "DIO.h"
+#include "STD_Data_Types.h"
 
 /*
  * Function_Name:GPIO_Set_Current_Str
  * Function_Description:this function will take the current strength wanted (2_mA,4_mA,8_mA) and set the Drive control registers
 */
-void GPIO_Set_Current_Str(Pin_Drive_C Drive,ul* BASE,BIT_NUM Pin_Num)
+void GPIO_Set_Current_Str(Pin_Drive_C Drive,ul* BASE,u8 Pin_Num)
 {
     switch(Drive)
     {
@@ -26,7 +27,7 @@ void GPIO_Set_Current_Str(Pin_Drive_C Drive,ul* BASE,BIT_NUM Pin_Num)
  * Function_Description:this function will take Pin_Func (pull_up,pull_down,...) ,port and the pin,and set the pin Func
  *
 */
-void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,BIT_NUM Pin_Num)
+void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,u8 Pin_Num)
 {
     switch(Func)
     {
@@ -42,7 +43,7 @@ void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,BIT_NUM Pin_Num)
  * Function_Name:GPIO_Get_Base
  * Function_Description:this function will take the port number(0-->A,1-->B,..) and return it's base
 */
- ul* GPIO_Get_Base(PORT_E Port)
+ ul*GPIO_Get_BASE(unsigned int Port)
 {
     switch(Port)
     {
@@ -61,7 +62,7 @@ void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,BIT_NUM Pin_Num)
  * Function_Name:DIO_SetPinDirection
  * Function_Description:Set the direction of the pin
 */
-void GPIO_SetPinDirection(ul* BASE,BIT_NUM Pin_Num, PIN_DIR Direction)
+void GPIO_SetPinDirection(ul* BASE,u8 Pin_Num, PIN_DIR Direction)
 {
         if(Pin_Num<=BIT31)
         {
@@ -77,7 +78,7 @@ void GPIO_SetPinDirection(ul* BASE,BIT_NUM Pin_Num, PIN_DIR Direction)
  * Function_Name:DIO_SetPinValue
  * Function_Description:Set the Value of the pin
 */
-void GPIO_SetPinValue(const ul* BASE,BIT_NUM Pin_Num,PIN_VAL Pin_Value)
+void GPIO_SetPinValue(const ul* BASE,u8 Pin_Num,PIN_VAL Pin_Value)
 {
     if(Pin_Num<=BIT31)
     {
@@ -95,10 +96,10 @@ void GPIO_SetPinValue(const ul* BASE,BIT_NUM Pin_Num,PIN_VAL Pin_Value)
  * Function_Name:DIO_SetPinValue
  * Function_Description:Set the Value of the pin
 */
-u8 GPIO_GetPinValue(const ul* BASE,BIT_NUM Pin_Num)
+u8 GPIO_GetPinValue(const ul* BASE,u8 Pin_Num)
 {
     u8 PIN_VALUE;
-    if(Pin_Num<=BIT31
+    if(Pin_Num<=BIT31)
     {
      PIN_VALUE=GETBIT(GET_REG(BASE,GPIODATA),Pin_Num);
      return PIN_VALUE;
@@ -111,7 +112,7 @@ u8 GPIO_GetPinValue(const ul* BASE,BIT_NUM Pin_Num)
  * Function_Name:DIO_SetPinValue
  * Function_Description:enable digital pins
 */
-void GPIO_Digital_Pin_Enable(const ul* BASE,BIT_NUM Pin_Num) /* Base A,B,C,D,E OR F*/
+void GPIO_Digital_Pin_Enable(ul* BASE,u8 Pin_Num) /* Base A,B,C,D,E OR F*/
 {
     SETBIT(GET_REG(BASE,GPIODEN),Pin_Num);
 }
@@ -122,7 +123,7 @@ void GPIO_Digital_Pin_Enable(const ul* BASE,BIT_NUM Pin_Num) /* Base A,B,C,D,E O
  * Function_Description:this function take the GPIO port (PORTAE,PORTBE,...ETC) and enable it
  *
 */
-void GPIO_Port_Enable(PORT_E Port)
+void GPIO_Port_Enable(u8 Port)
 {
    SETBIT(GET_REG(SYSTEM_CONTROL,RCGCGPIO),Port);
 }
@@ -142,11 +143,10 @@ void GPIO_Config(struct GPIO_Config C1)
 
     GET_REG(GPIO_GET_BASE(C1.PORT),GPIOLOCK) = Unlock_Code;    /*Unlock pin in case it is protected  */
     SETBIT(GET_REG(GPIO_GET_BASE(C1.PORT),GPIOCR),C1.PIN);     /* Set the required pin in GPIOCR*/
-    GPIO_SetPinDirection(GPIO_GET_BASE(C1.PORT),C1.PIN,C1.DIR);/*Set direction */
+    GPIO_SetPinDirection(GPIO_Get_BASE(C1.PORT),C1.PIN,C1.DIR);/*Set direction */
 
     /*3- Configure the GPIOAFSEL register to program each bit as a GPIO or alternate pin */
     /* clear the pins in GPIOAFSEL to use this pins as GPIO pins */
-
      CLEARBIT(GET_REG(GPIO_GET_BASE(C1.PORT),GPIOAFSEL),C1.PIN); /* Set GPIO PIN */
 
 
@@ -160,20 +160,18 @@ void GPIO_Config(struct GPIO_Config C1)
       * */
      //-------------------------------------------<>--------------------------------------//
 
-
-
      /* 4- Set the current strength */
      GPIO_Set_Current_Str(C1.C_strength,GPIO_GET_BASE(C1.PORT),C1.PIN);
 
      /*5- Program the pin to have either pull-up, pull-down, or open drain functionality .*/
-     GPIO_Set_Pin_Functionality( C1.FUNC,GPIO_GET_BASE(C1.PORT),C1.PIN);
+     GPIO_Set_Pin_Functionality(C1.FUNC,GPIO_GET_BASE(C1.PORT),C1.PIN);
 
 
      /* 6- Digital Enable */
      GPIO_Digital_Pin_Enable(GPIO_GET_BASE(C1.PORT),C1.PIN); /* Enable Pin as digital */
 
-
     /* step 7,8 in configuration related to the interrupts */
+
 }
 
 

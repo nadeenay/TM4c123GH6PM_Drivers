@@ -16,40 +16,40 @@
   }PIN_VAL;
 
   /* Bits */
-  typedef enum {
-        BIT0,
-        BIT1,
-        BIT2,
-        BIT3,
-        BIT4,
-        BIT5,
-        BIT6,
-        BIT7,
-        BIT8,
-        BIT9,
-        BIT10,
-        BIT11,
-        BIT12,
-        BIT13,
-        BIT14,
-        BIT15,
-        BIT16,
-        BIT17,
-        BIT18,
-        BIT19,
-        BIT20,
-        BIT21,
-        BIT22,
-        BIT23,
-        BIT24,
-        BIT25,
-        BIT26,
-        BIT27,
-        BIT28,
-        BIT29,
-        BIT30,
-        BIT31
-    }BIT_NUM;
+
+#define        BIT0    0
+#define        BIT1    1
+#define        BIT2    2
+#define        BIT3    3
+#define        BIT4    4
+#define        BIT5    5
+#define        BIT6    6
+#define        BIT7    7
+#define        BIT8    8
+#define        BIT9    9
+#define        BIT10   10
+#define        BIT11   11
+#define        BIT12   12
+#define        BIT13   13
+#define        BIT14   14
+#define        BIT15   15
+#define        BIT16   16
+#define        BIT17   17
+#define        BIT18   18
+#define        BIT19   19
+#define        BIT20   20
+#define        BIT21   21
+#define        BIT22   22
+#define        BIT23   23
+#define        BIT24   24
+#define        BIT25   25
+#define        BIT26   26
+#define        BIT27   27
+#define        BIT28   28
+#define        BIT29   29
+#define        BIT30   30
+#define        BIT31   31
+
 
 
 //------------------------------>Advanced Peripheral Bus (APB) BASE<------------------------------//
@@ -61,19 +61,20 @@
 #define PORTF  0x40025000
 
 //------------------------------>PORTS ENABLE<------------------------------//
-typedef enum {
- PORTAE  ,
- PORTBE  ,
- PORTCE  ,
- PORTDE  ,
- PORTEE  ,
- PORTFE
-}PORT_E;
+
+#define PORTAE  0
+#define PORTBE  1
+#define PORTCE  2
+#define PORTDE  3
+#define PORTEE  4
+#define PORTFE  5
+
 
 
 //------------------------------>STD Types<------------------------------//
 typedef unsigned long ul;
 typedef unsigned char u8;
+
 
 
 //------------------------------>Select Drive <------------------------------//

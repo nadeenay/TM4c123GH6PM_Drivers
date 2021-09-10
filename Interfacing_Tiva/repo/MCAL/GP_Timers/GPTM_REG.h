@@ -21,8 +21,8 @@
 #define Wide_Timer_1  0x40037000
 #define Wide_Timer_2  0x4004C000
 #define Wide_Timer_3  0x4004D000
-#define Wide Timer_4  0x4004E000
-#define Wide Timer_5  0x4004F000
+#define Wide_Timer_4  0x4004E000
+#define Wide_Timer_5  0x4004F000
 
 
 //----------------------------------------->END Timers Registers's Base Address <-----------------------------------------//
@@ -35,6 +35,8 @@
 //----------------------------------------->Enable timer register <-----------------------------------------//
 /* General-Purpose Timer Run Mode Clock Gating Control */
 #define RCGCTIMER       0x604
+
+#define RCGCWTIMER      0x65C
 
 //-----------------------------------------> Registers's OFFSET <-----------------------------------------//
 

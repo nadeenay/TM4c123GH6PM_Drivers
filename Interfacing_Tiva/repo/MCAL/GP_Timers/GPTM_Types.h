@@ -7,6 +7,9 @@
 
 #ifndef REPO_MCAL_GP_TIMERS_GPTM_TYPES_H_
 #define REPO_MCAL_GP_TIMERS_GPTM_TYPES_H_
+
+#define null (void*)0
+
 //--------------------------------------------->Timer_Num<---------------------------------------------//
 typedef enum{
     Timer_0,
@@ -23,30 +26,35 @@ typedef enum{
     Count_Down
 }Count_State;
 
+
+
+
 //---------------------------------------------> Timer Mode pit in GPTM_TnMR depend on the Mode of the Timer <---------------------------------------------//
-typedef enum{
-  Reserved,
-  One_Shoot,
-  Periodic,
-  Capture       /* In case the timer is in Input Edge Mode (Edge_count,Edge_Time) */
-}Timer_Mode_TnMR;
+typedef enum {
+    Single=0x0,       /* use A or B as single Timer */
+    Concatenated=0x4  /* use A and B as Timer */
+}Timer_State;
+
+//---------------------------------------------> Timer_Type <---------------------------------------------//
+typedef enum {
+    A,
+    B
+}Timer_Type;
+
+//---------------------------------------------> Timer_Size <---------------------------------------------//
+typedef enum {
+    Timer,
+    Wide_Timer
+}Timer_Size;
 
 //--------------------------------------------->Timer  Mode <---------------------------------------------
 typedef enum{
-  One_Shoot_Periodic,
-  RTC,
-  Input_Edge_Count,      /* In case the timer is in Input Edge Mode (Edge_count,Edge_Time) */
-  Input_Edge_Time,
-  PWM
+ One_Shot=0x01,
+ Periodic=0x2
 }Timer_Mode;
 
 
-//--------------------------------------------->Timer Size <---------------------------------------------//
-typedef enum{
-    TM_32=0,   /* 32 for Timer and 64 for wide */
-    TM_RTC=1,  /* 32 for Timer and 64 for wide */
-    TM_16=4    /* 16 for Timer and 32 for wide */
-}Timer_Size;
+
 
 
 

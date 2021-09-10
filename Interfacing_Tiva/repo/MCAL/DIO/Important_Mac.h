@@ -15,7 +15,7 @@
 #define TOGGLEBIT(Reg,Pin_Num)  (Reg)^=(1<<(Pin_Num))
 
 /* Get any register with  it's specific address */
-#define GET_REG(BASE,OFFSET)  (*((volatile unsigned long*)(BASE+OFFSET)))
+#define GET_REG(BASE,OFFSET)  (*((volatile unsigned long *)(BASE+OFFSET)))
 
 
 

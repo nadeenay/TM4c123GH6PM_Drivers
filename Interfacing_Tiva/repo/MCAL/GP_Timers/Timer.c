@@ -1,8 +1,9 @@
-#include "../DIO/DIO_Types.h"
 #include "../DIO/Important_Mac.h"
 #include "GPTM_Types.h"
 #include "GPTM_REG.h"
 #include "Timer.h"
+#include "../DIO/STD_Data_Types.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------->Public Functions <-----------------------------------------//
@@ -39,9 +40,13 @@ const ul* GPTM_Get_Base(Timer_Num T)
  *
 */
 /*Set bit 0--> enable timer 0, 1-->enable 1 ....*/
-void GPTM_Enable_Timer_Reg(Timer_Num T)
+void GPTM_Enable_Clock_Timer(Timer_Num T,Timer_Size S)
 {
+    if(S==Timer)             /* Not wide timer */
     SETBIT(GET_REG(SYSTEM_CONTROL,RCGCTIMER),T);
+
+    else if(S==Wide_Timer)    /* wide timer */
+    SETBIT(GET_REG(SYSTEM_CONTROL,RCGCWTIMER),T);
 }
 
 
@@ -50,57 +55,82 @@ void GPTM_Enable_Timer_Reg(Timer_Num T)
  * Function_Description:this function will  make the configuration of the timers
  *
 */
-/*
+
+
  /* Configuration will be for the One shot or periodic mode */
 
 void Timer_Module_Config(struct Timer_Config TM_Config)
 {
-    /* 1-Enable Timer required */
-    GPTM_Enable_Timer_Reg(TM_Config.T_Num);
+      /* 1-Enable Clock for the timer required */
+      GPTM_Enable_Clock_Timer(TM_Config.T_Num,TM_Config.TM_Size);
+
+      if((TM_Config.TM_State==Single&&TM_Config.TM_Type==A)||TM_Config.TM_State==Concatenated) /*we will Configure GPTMTAMR */
+      {
+
+              /*2-Ensure disable the timer before any changes */
+              CLEARBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),0); /*Disbale A*/
 
 
-    /*2-Ensure disable the timer before any changes */
-    CLEARBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),0);
+
+              /*3-Select the  size required for the timer */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)=TM_Config.TM_State; /*Select 32 for 16/32-bit timer or 64 for wide timer (Concatenated Mode ) */
+                                                                                  /*Select 16 for 16/32-bit timer or 32 for wide timer (Single Mode  ) */
 
 
-    /*3-Select the Size of the timer */
-    switch(TM_Config.TM_Mode)
-    {
-    case One_Shoot_Periodic:  GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)= 0x00000000;break;
-    case RTC:                 GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)= 0x00000001;break;
-    default :                 GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)= 0x00000004;break; /* Others Modes */
-    }
-
-    /*4-
-     * Configure the TnMR field in the GPTM Timer n Mode Register (GPTMTnMR):
-        a. Write a value of 0x1 for One-Shot mode.
-        b. Write a value of 0x2 for Periodic mode.
-     */
-    /* set periodic timer mode 0x10-->for periodic mode 1:0 bit in GPTMTAMR */
-      GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAMR)=TM_Config.TM_Mode_TnMR;
+              /*4-Set state of Counter (Count_Up or Down) and Timer Mode (one shot or periodic) */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAMR)|=(TM_Config.TM_Mode)|(TM_Config.C_Sate<<4);
 
 
-    /*5-Set the timer count up or count down  */
-    if(TM_Config.C_Sate==Count_Down)
-    CLEARBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAMR),4);
+              /* 5- Set the initial value of the timer */
+              if(TM_Config.TM_State==Single)
+              {
+               /*in case we are in 16 timer mode the start value should be less than 0xFFFF*/
+               // if(TM_Config.TM_Size==Timer&&TM_Config.TM_Start_Value<=0xFFFF)
+                GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAILR)=TM_Config.TM_Start_Value;
+               /* else
+                 #warning Error in setting the Timer_start value
+                 */
+              }
+              else if(TM_Config.TM_State==Concatenated)
+              {    /*Lower bits in GPTMTAILR */
+                  GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAILR)=TM_Config.TM_Start_Value;
 
-    else if(TM_Config.C_Sate==Count_Up)
-    SETBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAMR),4);
+                   /*Lower bits in GPTMTBILR */
+                  GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTBILR)=(TM_Config.TM_Start_Value>>32);
+
+              }
+
+              /*6- If interrupts are required, set the appropriate bits in the GPTM Interrupt Mask Register.*/
+
+              /* 7- Enable the timer and start counting */
+                 SITBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),0);
+
+      }
+      else if(TM_Config.TM_Type==B)      /*we will Configure GPTMTBMR*/
+      {
+
+              /*2-Ensure disable the timer before any changes */
+              CLEARBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),8); /*Disbale B*/
 
 
-    /* 6- Set the initial value of the timer */
-    GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAILR)=TM_Start_Val;
+              /*3-Select the  size required for the timer */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)=TM_Config.TM_State; /*Select 32 for 16/32-bit timer or 64 for wide timer (Concatenated Mode ) */
+                                                                                  /*Select 16 for 16/32-bit timer or 32 for wide timer (Single Mode) */
+              /*4-Set state of Counter (Count_Up or Down) and Timer Mode (one shot or periodic) */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTBMR)|=(TM_Config.TM_Mode)|(TM_Config.C_Sate<<4);
+
+              /* 5- Set the initial value of the timer */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTAILR)=TM_Config.TM_Start_Value;
+
+              /*6- If interrupts are required, set the appropriate bits in the GPTM Interrupt Mask Register.*/
 
 
-    /*7- If interrupts are required, set the appropriate bits in the GPTM Interrupt Mask Register.*/
+              /* 7- Enable the timer and start counting */
+                 SITBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),8);
 
+      }
 
-    /* 8- Enable the timer and start counting */
-    SITBIT(GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCTL),0);
-
-    /*  End of configuration */
 
 }
-
 
 //----------------------------------------->END Public Functions <-----------------------------------------//
