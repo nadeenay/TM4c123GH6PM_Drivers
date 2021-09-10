@@ -2,7 +2,7 @@
 
 #ifndef REPO_MCAL_DIO_DIO_H_
 #define REPO_MCAL_DIO_DIO_H_
-
+#include "STD_Data_Types.h"
 
 /* Configuration for the pin */
 struct GPIO_Config
@@ -29,7 +29,7 @@ void GPIO_Set_Current_Str(Pin_Drive_C Drive,ul* BASE,u8 Pin_Num);
 void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,u8 Pin_Num);
 
 
- ul* GPIO_Get_BASE(unsigned int Port);
+ul* GPIO_Get_BASE(unsigned int Port);
 
 
 void GPIO_SetPinDirection( ul* BASE,u8 Pin_Num, PIN_DIR Direction);

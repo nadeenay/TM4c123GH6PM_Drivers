@@ -114,8 +114,8 @@ void Timer_Module_Config(struct Timer_Config TM_Config)
 
 
               /*3-Select the  size required for the timer */
-              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)=TM_Config.TM_State; /*Select 32 for 16/32-bit timer or 64 for wide timer (Concatenated Mode ) */
-                                                                                  /*Select 16 for 16/32-bit timer or 32 for wide timer (Single Mode) */
+              GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMCFG)=TM_Config.TM_State;  /*Select 32 for 16/32-bit timer or 64 for wide timer (Concatenated Mode ) */
+                                                                                   /*Select 16 for 16/32-bit timer or 32 for wide timer (Single Mode) */
               /*4-Set state of Counter (Count_Up or Down) and Timer Mode (one shot or periodic) */
               GET_REG(GPTM_Get_Base(TM_Config.T_Num),GPTMTBMR)|=(TM_Config.TM_Mode)|(TM_Config.C_Sate<<4);
 

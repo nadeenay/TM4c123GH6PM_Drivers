@@ -32,8 +32,9 @@ void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,u8 Pin_Num)
     switch(Func)
     {
     case PULL_UP:    SETBIT(GET_REG(BASE,GPIOPUR),Pin_Num);break;   /* The corresponding GPIO Pin_Num has PULL_UP resistor */
-    case PULL_DOWN:  SETBIT(GET_REG(BASE,GPIOPDR),Pin_Num);break; /* The corresponding GPIO Pin_Num has PULL_Down resistor*/
-    case OPEN_DRAIN: SETBIT(GET_REG(BASE,GPIOODR),Pin_Num);break;/* The corresponding GPIO Pin_Num has PULL_OpenDrain resistor */
+    case PULL_DOWN:  SETBIT(GET_REG(BASE,GPIOPDR),Pin_Num);break;   /* The corresponding GPIO Pin_Num has PULL_Down resistor*/
+    case OPEN_DRAIN: SETBIT(GET_REG(BASE,GPIOODR),Pin_Num);break;   /* The corresponding GPIO Pin_Num has PULL_OpenDrain resistor */
+    default :    return;
     }
 }
 
@@ -43,16 +44,16 @@ void GPIO_Set_Pin_Functionality(Pin_Func Func,ul* BASE,u8 Pin_Num)
  * Function_Name:GPIO_Get_Base
  * Function_Description:this function will take the port number(0-->A,1-->B,..) and return it's base
 */
- ul*GPIO_Get_BASE(unsigned int Port)
+ ul* GPIO_Get_BASE(unsigned int Port)
 {
     switch(Port)
     {
-    case PORTAE:  return (ul*)PORTA;
-    case PORTBE:  return (ul*)PORTB;
-    case PORTCE:  return (ul*)PORTC;
-    case PORTDE:  return (ul*)PORTD;
-    case PORTEE:  return (ul*)PORTE;
-    case PORTFE:  return (ul*)PORTF;
+    case PORTAE:  return (ul*)(PORTA);
+    case PORTBE:  return (ul*)(PORTB);
+    case PORTCE:  return (ul*)(PORTC);
+    case PORTDE:  return (ul*)(PORTD);
+    case PORTEE:  return (ul*)(PORTE);
+    case PORTFE:  return (ul*)(PORTF);
     default:      return null;
     }
 }
@@ -141,13 +142,13 @@ void GPIO_Config(struct GPIO_Config C1)
     /*2- Unlocking the Pin in case that it is from GPIO pins with special consideration
      * Set the direction of the GPIO port pins by programming the GPIODIR register*/
 
-    GET_REG(GPIO_GET_BASE(C1.PORT),GPIOLOCK) = Unlock_Code;    /*Unlock pin in case it is protected  */
-    SETBIT(GET_REG(GPIO_GET_BASE(C1.PORT),GPIOCR),C1.PIN);     /* Set the required pin in GPIOCR*/
+    GET_REG(GPIO_Get_BASE(C1.PORT),GPIOLOCK) = Unlock_Code;    /*Unlock pin in case it is protected  */
+    SETBIT(GET_REG(GPIO_GeT_BASE(C1.PORT),GPIOCR),C1.PIN);     /* Set the required pin in GPIOCR*/
     GPIO_SetPinDirection(GPIO_Get_BASE(C1.PORT),C1.PIN,C1.DIR);/*Set direction */
 
     /*3- Configure the GPIOAFSEL register to program each bit as a GPIO or alternate pin */
     /* clear the pins in GPIOAFSEL to use this pins as GPIO pins */
-     CLEARBIT(GET_REG(GPIO_GET_BASE(C1.PORT),GPIOAFSEL),C1.PIN); /* Set GPIO PIN */
+     CLEARBIT(GET_REG(GPIO_GeT_BASE(C1.PORT),GPIOAFSEL),C1.PIN); /* Set GPIO PIN */
 
 
      //-------------------------------------------<>--------------------------------------//
@@ -161,14 +162,14 @@ void GPIO_Config(struct GPIO_Config C1)
      //-------------------------------------------<>--------------------------------------//
 
      /* 4- Set the current strength */
-     GPIO_Set_Current_Str(C1.C_strength,GPIO_GET_BASE(C1.PORT),C1.PIN);
+     GPIO_Set_Current_Str(C1.C_strength,GPIO_GeT_BASE(C1.PORT),C1.PIN);
 
      /*5- Program the pin to have either pull-up, pull-down, or open drain functionality .*/
-     GPIO_Set_Pin_Functionality(C1.FUNC,GPIO_GET_BASE(C1.PORT),C1.PIN);
+     GPIO_Set_Pin_Functionality(C1.FUNC,GPIO_GeT_BASE(C1.PORT),C1.PIN);
 
 
      /* 6- Digital Enable */
-     GPIO_Digital_Pin_Enable(GPIO_GET_BASE(C1.PORT),C1.PIN); /* Enable Pin as digital */
+     GPIO_Digital_Pin_Enable(GPIO_GeT_BASE(C1.PORT),C1.PIN); /* Enable Pin as digital */
 
     /* step 7,8 in configuration related to the interrupts */
 

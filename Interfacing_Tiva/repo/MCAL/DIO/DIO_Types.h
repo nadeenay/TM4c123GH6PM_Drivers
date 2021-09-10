@@ -69,14 +69,6 @@
 #define PORTEE  4
 #define PORTFE  5
 
-
-
-//------------------------------>STD Types<------------------------------//
-typedef unsigned long ul;
-typedef unsigned char u8;
-
-
-
 //------------------------------>Select Drive <------------------------------//
 typedef enum{
  Drive_2_mA,
@@ -89,7 +81,8 @@ typedef enum{
 typedef enum{
   PULL_UP ,
   PULL_DOWN ,
-  OPEN_DRAIN
+  OPEN_DRAIN,
+  Def
 }Pin_Func;
 
 
