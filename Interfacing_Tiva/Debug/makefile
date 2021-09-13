@@ -13,7 +13,9 @@ ORDERED_OBJS += \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./repo/APP/LED.obj" \
+"./repo/APP/Timer_Test.obj" \
 "./repo/MCAL/DIO/DIO.obj" \
+"./repo/MCAL/DIO/Interrupt.obj" \
 "./repo/MCAL/GP_Timers/Timer.obj" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -164,8 +166,8 @@ Interfacing_Tiva.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "repo\APP\LED.obj" "repo\MCAL\DIO\DIO.obj" "repo\MCAL\GP_Timers\Timer.obj" 
-	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "repo\APP\LED.d" "repo\MCAL\DIO\DIO.d" "repo\MCAL\GP_Timers\Timer.d" 
+	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "repo\APP\LED.obj" "repo\APP\Timer_Test.obj" "repo\MCAL\DIO\DIO.obj" "repo\MCAL\DIO\Interrupt.obj" "repo\MCAL\GP_Timers\Timer.obj" 
+	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "repo\APP\LED.d" "repo\APP\Timer_Test.d" "repo\MCAL\DIO\DIO.d" "repo\MCAL\DIO\Interrupt.d" "repo\MCAL\GP_Timers\Timer.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

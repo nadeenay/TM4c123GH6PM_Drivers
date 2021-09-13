@@ -3,6 +3,7 @@
 #define REPO_MCAL_DIO_DIO_TYPES_H_
 
 #define null (void*)0
+
 /* Pin Direction */
  typedef enum {
      INPUT ,
@@ -74,7 +75,7 @@ typedef enum{
  Drive_2_mA,
  Drive_4_mA,
  Drive_8_mA
-}Pin_Drive_C;
+}Pin_Current;
 
 
 //------------------------------>PIN FUNCTIONALITY <------------------------------//

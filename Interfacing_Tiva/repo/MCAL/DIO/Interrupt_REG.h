@@ -1,4 +1,13 @@
 
+
+#define NVIC 0xE000E000    /* nested vector interrupt controller */
+
+
+#define  EN0 0x100 /*Interrupt 0-31 Set Enable  */
+#define  EN1 0x104 /*Interrupt 32-63 Set Enable */
+#define  EN2 0x108 /*Interrupt 64-95 Set Enable */
+#define  EN3 0x10C /*Interrupt 96-127 Set Enable*/
+#define  EN4 0x110 /*Interrupt 128-138Set Enable*/
 /*
  * 0--> The edge on the corresponding pin is detected (edge-sensitive).
  * 1-->The level on the corresponding pin is detected (level-sensitive).

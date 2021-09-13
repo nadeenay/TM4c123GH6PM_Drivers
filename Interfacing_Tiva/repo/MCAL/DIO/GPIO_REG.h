@@ -74,6 +74,9 @@
 
 #define GPIOCR 0x524
 
+
+#define GPIOPCTL 0x52C
+
 /*
 0--> The corresponding pin is not used to trigger the ADC.
 1--> The corresponding pin is used to trigger the ADC.

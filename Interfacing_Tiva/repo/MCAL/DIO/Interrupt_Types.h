@@ -5,14 +5,14 @@
 
 typedef enum{
     Edge,
-    Level=0xFF
+    Level
 
 }Interrupt_Type;
 
 
 typedef enum{
     Low_L,
-    High_L=0xFF
+    High_L
 
 }Level_O_Edge__Type;
 

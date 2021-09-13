@@ -13,20 +13,23 @@
 
 struct Interrupt_config
 {
-    ul* port;                         /*Port_Base required for interrupt */
+    ul port;                         /*Port_Base required for interrupt */
+    u8 Pin;                           /*Pin required  for interrupt */
     Interrupt_Type Type;             /*Interrupt type */
     Level_O_Edge__Type LE_Type;      /*Edge type or Level type (rising or falling) */
+    Edge_Num Ed_Num;                 /*Sense in both Edges or one */
 };
 
 
 
 //-------------------------------------------->Public Functions <---------------------------------------//
 
-void INT_Prevent_False_Interrupts(ul*port_Base,Interrupt_Type Type,Level_O_Edge__Type LE_Type);
+void INT_Config(struct Interrupt_config C1,u8 IRQ);
 
-ul* INT_Get_BASE(ui Port_E);
+void GPIOF_Handler(void);
 
-void INT_Config(struct Interrupt_config C1);
+void Enable_NVIC_IRQ( u8 IRQ );
 
+void Processor_Enable_Interrupt();
 
 #endif /* REPO_MCAL_DIO_INTERRUPT_H_ */
