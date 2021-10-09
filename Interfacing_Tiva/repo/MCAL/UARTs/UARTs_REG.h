@@ -7,6 +7,7 @@
 
 #ifndef REPO_MCAL_UARTS_UARTS_REG_H_
 #define REPO_MCAL_UARTS_UARTS_REG_H_
+
 //----------------------------------------->Enable UART Clock register <-----------------------------------------//
 #define RCGCUART   0x618
 
