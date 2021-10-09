@@ -6,5 +6,4 @@ Drivers for interfacing with Tiva_C :\
 1.3-External Interrupts .\
 1.4-UART Module .\
 
-2-In case you will use Interrupts don't forget to put the Interrupt handler in the setup file .\
-
+2-In case you will use Interrupts don't forget to put the Interrupt handler in the setup file .
